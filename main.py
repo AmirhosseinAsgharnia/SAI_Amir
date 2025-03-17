@@ -20,24 +20,27 @@ for episode in range(num_episodes):
     
     obs_1 = env.reset()
 
-    obs_1 = np.transpose(obs_1[0], (2, 0, 1))
+    obs_1 = obs_1[0]
 
     episode_reward = 0
 
     for step in range(max_steps):
-
+        action = 0
         action = agent.act(obs_1)
+
+        # obs_1_visit = np.transpose(obs_1[0], (2, 0, 1))
         state_tensor = torch.tensor(obs_1, dtype = torch.float32).unsqueeze(0)
         agent.visit_state(state_tensor)
+
         obs_2 , reward , done , *extras = env.step(action)
-        obs_2 = np.transpose(obs_2, (2, 0, 1))
+        
         agent.remember(obs_1 , action , reward , obs_2 , done)
         agent.train_step()
         obs_1 = obs_2
         #env.render()
         if done:
             break
-            
+        print(agent.visit_num(state_tensor))
     print(f"Episode {episode+1}")
 
 trained_Q_network = neural_network_model(input_channels=13 , action_dim=10)

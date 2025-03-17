@@ -12,14 +12,16 @@ class neural_network_model(nn.Module):
         self.out = nn.Linear(256 , action_dim)
 
     def forward(self, x):
-        
+        if x.dim() == 4: 
+            x = x.permute(0, 3, 1, 2) 
+        elif x.dim() == 3: 
+            x = x.permute(2, 0, 1).unsqueeze(0)  
         x = torch.flatten(x, start_dim=1)
-        
         x = torch.relu(self.fc1(x))
         
         return self.out(x) 
     
-# This net keeps track of visited states: A CNN, which creates a latent layer (That's it)
+# This net keeps track of visited states
 class exploration_network(nn.Module):
     def __init__(self, input_channels=13):
         super(exploration_network, self).__init__()
@@ -28,4 +30,8 @@ class exploration_network(nn.Module):
         nn.init.dirac_(self.conv1.weight)
         
     def forward(self, x):
+        if x.dim() == 4: 
+            x = x.permute(0, 3, 1, 2) 
+        elif x.dim() == 3: 
+            x = x.permute(2, 0, 1).unsqueeze(0) 
         return self.conv1(x).squeeze(1) 
