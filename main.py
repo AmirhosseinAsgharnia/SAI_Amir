@@ -40,7 +40,7 @@ for episode in range(num_episodes):
         #env.render()
         if done:
             break
-        print(agent.visit_num(state_tensor))
+        #print(agent.visit_num(state_tensor))
     print(f"Episode {episode+1}")
 
 trained_Q_network = neural_network_model(input_channels=13 , action_dim=10)
