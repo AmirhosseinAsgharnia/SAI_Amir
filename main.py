@@ -12,7 +12,7 @@ env = sai.make_env()
 agent = agent_class()
 
 # Maximum episodes and maximum steps in each episode
-num_episodes = 2
+num_episodes = 50
 max_steps = 100
 
 # Learning Loop
